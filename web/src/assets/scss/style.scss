@@ -1,0 +1,128 @@
+@import './variables';
+
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+body {
+    margin: 0 auto;
+    padding: 0;
+}
+
+a,
+a:hover,
+a:focus,
+a:visited {
+  text-decoration: none;
+  color: #fff;
+  color: inherit;
+  color: unset;
+  outline: none;
+}
+// width, height
+@for $i from 0 through 100 { 
+    @each $key, $item in $direction {
+        .#{$key}-#{$i} {
+            #{$item}: $i * 1%;
+        }
+    }
+    .w-#{$i} {
+        width: $i * 1%;
+    }
+    .h-#{$i} {
+        height: $i * 1%;
+    }
+}
+.radius {
+    border-radius: 5px;
+}
+.pointer {
+    cursor: pointer;
+}
+//flex
+.d-flex {
+    display: flex;
+}
+.flex-column {
+    flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+@each $key, $value in $flex-jc {
+    .jc-#{$key} {
+        justify-content: $value;
+    }
+}
+
+@each $key, $value in $flex-ai {
+    .ai-#{$key} {
+        align-items: $value;
+    }
+}
+.flex-1 {
+    flex: 1;
+}
+
+.of-hid {
+    overflow: hidden;
+}
+
+@each $key, $item in $position {
+    .ps-#{$key} {
+        position: $item;
+    }
+}
+//color
+@each $colorKey, $color in $colors {
+    .text-#{$colorKey} {
+        color: $color !important;
+    }
+    .bg-#{$colorKey} {
+        background-color: $color !important;
+    }
+}
+//opacity
+@for $var from 0 through 10 {
+    .op-#{$var} {
+        opacity: $var * 0.1;
+    }
+    .bg-alpha-#{$var} {
+        background: rgba(255, 255, 255, $var*0.1);
+    }
+}
+//margin padding
+@for $var from 0 to 2000 {
+    @each $key, $val in $spacing-types {
+        // margin: 
+        .#{$key}-#{$var}-px {
+            #{$val}: $var * 1px;
+        } 
+        //margin-x
+        .#{$key}x-#{$var}-px {
+            #{$val}-left: $var * 1px;
+            #{$val}-right: $var * 1px;
+        }
+        //margin-y
+        .#{$key}y-#{$var}-px {
+            #{$val}-top: $var * 1px;
+            #{$val}-bottom: $var * 1px;
+        }
+        @each $keyd, $item in $direction {
+            .#{$key}#{$keyd}-#{$var}-px {
+                #{$val}-#{$item} : $var * 1px;
+            }
+        }
+    }
+    @each $dir, $dirval in $direction {
+        .#{$dir}-#{$var}-px {
+            #{$dirval} : $var * 1px;
+        }
+    }
+    .w-#{$var}-px {
+        width: $var * 1px;
+    }
+    .h-#{$var}-px {
+        height: $var * 1px;
+    }
+}

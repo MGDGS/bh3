@@ -1,0 +1,48 @@
+//flex
+$flex-jc: (
+    start: flex-start,
+    end: flex-end,
+    center: center,
+    between: space-between,
+    around: space-around
+    
+
+);
+$flex-ai: (
+    start: flex-start,
+    end: flex-end,
+    center: center,
+    stretch: stretch
+);
+//position
+$position: (
+    "rel": relative,
+    "ab": absolute,
+    "fixed": fixed,
+);
+//colors
+$colors: (
+    "primary": #62eaf5,
+    "info": #00a5e2,
+    "white": #fff,
+    "green": #4eb700,
+    "info-1": #0097de,
+    "info-2": #409EFF,
+    "yellow": #fedf4c,
+    "dark": #333333,
+    "black": #000,
+    "light":  #33c8ff,
+    "light-1": #62e600,
+    "news-bg": #354c99
+);
+//
+$direction: (
+    t: top,
+    l: left,
+    r: right,
+    b: bottom
+);
+$spacing-types: (
+    m: margin,
+    p: padding
+);
