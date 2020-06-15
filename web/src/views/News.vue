@@ -8,89 +8,119 @@
       </div>
       <div class="news-content">
         <div class="news-content-wrap">
-          <cates :cates="newsCates" size="l"></cates>
-          <div class="news-list"></div>
-          <div class="more-btn">查看更多</div>
+          <cates :cates="cates" size="l" @cateactive="active"></cates>
+          <div class="news-list">
+            <div>
+              <a class="news-item" v-for="(list,index) in pagination" :key="index">
+                <div class="news-item__img">
+                  <img :src="list[1]" />
+                </div>
+                <div class="news-item_body">
+                  <div class="news-item_title">
+                    <div>{{list[2]}}</div>
+                    <span>发布日期：{{list[3] | date}}</span>
+                    <div class="base-line"></div>
+                  </div>
+                  <p class="news-item__intro">{{list[4]}}</p>
+                </div>
+              </a>
+            </div>
+            <div class="more-btn" @click="page++">查看更多</div>
+          </div>
         </div>
       </div>
+      <div class="top-arrow" v-show="topArrow" @click="toTop"></div>
     </div>
   </div>
 </template>
 
 <script>
-import Cates from '../components/Cate'
+import Cates from "../components/Cate";
+import dayjs from "dayjs";
 export default {
-    data() {
-        return{
-            newsCates: ["最新","动态","公告","活动","补给"]
-        }
-    },
-    components: {
-        cates: Cates
+  filters: {
+    date(val) {
+      return dayjs(val).format("YYYY-MM-DD");
     }
-}
+  },
+  data() {
+    return {
+      newsCates: ["最新", "动态", "公告", "活动", "补给"],
+      cateList: [],
+      cateActive: "最新",
+      page: 0,
+      topArrow: false
+    };
+  },
+  computed: {
+    cates() {
+      return this.cateList.map(items => {
+        return items.name;
+      });
+    },
+    newsList() {
+      let res = {};
+      this.cateList.map(items => {
+        res[items.name] = items.newsList.map(res => {
+          return [
+            res.categoryName,
+            res.scover,
+            res.title,
+            res.updatedAt,
+            res.label
+          ];
+        });
+      });
+      return res;
+      //let pagination;
+      // res[this.cateActive] !== undefined &&
+      //   res[this.cateActive] !== null &&
+      //   (pagination = res[this.cateActive].splice(0, this.page * 10 + 10));
+      // return pagination;
+    },
+    pagination() {
+      if (
+        this.newsList[this.cateActive] !== undefined &&
+        this.newsList[this.cateActive] !== null
+      ) {
+        return this.newsList[this.cateActive].slice(0, this.page * 10 + 10);
+      }
+      return "";
+    }
+  },
+  methods: {
+    async fetchNews() {
+      const res = await this.$http.get("news");
+      this.cateList = res.data;
+    },
+    active(data) {
+      this.cateActive = data;
+    },
+    handleScroll() {
+      // 页面滚动距顶部距离
+      var scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      scrollTop > 400 ? (this.topArrow = true) : (this.topArrow = false);
+    },
+    toTop() {
+      window.scrollTo(0, 0);
+    }
+  },
+  created() {
+    this.fetchNews();
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll, true);
+    // 监听（绑定）滚轮 滚动事件
+  },
+  components: {
+    cates: Cates
+  }
+};
 </script>
 
 <style lang="scss">
-@import "../assets/scss/variables";
-.news {
-  margin: 0 auto;
-  background: map-get($map: $colors, $key: "news-bg")
-    url(../assets/images/newsbg.jpg);
-  .news-wrap {
-    margin: 0 auto;
-    .news-title {
-      font-size: 60px;
-      font-weight: bold;
-      color: #9c9c9c;
-      text-align: center;
-      padding: 50px 0;
-      span:first-child {
-        color: #fff;
-      }
-      span:last-child {
-        display: inline-block;
-        -webkit-transform: skew(-11deg);
-        -ms-transform: skew(-11deg);
-        transform: skew(-11deg);
-        font-size: 40px;
-        margin-left: -15px;
-      }
-    }
-    .news-content {
-      border: 2px solid #646798;
-      border-radius: 5px;
-      .news-content-wrap {
-        background: rgba(15, 20, 97, 0.9);
-        border: 6px solid rgba(255, 255, 255, 0.2);
-        padding: 18px 14px;
-        .news-cates {
-          display: flex;
-          font-size: 30px;
-          font-weight: bold;
-          color: #fff;
-          margin-bottom: 25px;
-          padding-left: 10px;
-          .news-cate {
-            cursor: pointer;
-            width: 170px;
-            height: 60px;
-            line-height: 60px;
-            border-radius: 14px;
-            text-align: center;
-            background: #0097de;
-            margin-right: 10px;
-            transform: skew(-20deg);
-            span {
-              display: inline-block;
-              -webkit-transform: skew(20deg);
-              -ms-transform: skew(20deg);
-              transform: skew(20deg);
-            }
-          }
-        }
-      }
-    }
-  }
-}
+@import "../assets/scss/news";
 </style>

@@ -140,7 +140,7 @@
         <video
           src="https://webstatic.mihoyo.com/upload/op-public/2020/05/25/e5732d9455e0ae4599117927753d16e5_8735338734798242479.mp4"
           controls="controls"
-          autoplay="autoplay"
+          autoplay
         ></video>
       </div>
     </div>
